@@ -241,7 +241,12 @@
     >环形链表 II:https://leetcode-cn.com/problems/linked-list-cycle-ii/
     >K 个一组翻转链表（字节跳动、猿辅导在半年内面试常考）:https://leetcode-cn.com/problems/reverse-nodes-in-k-group/
 
+  >参考链接
+  如何理解算法时间复杂度的表示法:http://www.zhihu.com/question/21387264
+  Master theorem: [Master theorem](http://en.wikipedia.org/wiki/Master_theorem_(analysis_of_algorithms))
+  主定理: http://zh.wikipedia.org/wiki/%E4%B8%BB%E5%AE%9A%E7%90%86
+
 ### 第4课. 栈、队列、优先队列、双端队列：
 1. 栈和队列的实现与特性
 
-        
+  

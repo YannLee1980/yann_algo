@@ -109,6 +109,10 @@
   >自顶向下的编程方式:http://markhneedham.com/blog/2008/09/15/clean-code-book-review/c
   >自顶向下编程的 LeetCode 例题:https://leetcode-cn.com/problems/valid-palindrome/
 
+  >参考链接
+  如何理解算法时间复杂度的表示法:http://www.zhihu.com/question/21387264
+  Master theorem: [Master theorem](http://en.wikipedia.org/wiki/Master_theorem_(analysis_of_algorithms))
+  主定理: http://zh.wikipedia.org/wiki/%E4%B8%BB%E5%AE%9A%E7%90%86
 ## 第1周：
 ### **本周内容一览：**
 ### 第3课：数组、链表、跳表
