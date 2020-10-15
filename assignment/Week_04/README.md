@@ -86,7 +86,7 @@
    * 代码模版：
 
          left , right = 0 , len(arr) - 1
-         while left <= right:
+         while left <= right:    ####注意<=
             mid = (left + right) / 2
             if arr[mid] == target:
                # find the target!!
@@ -95,6 +95,7 @@
                left = mid + 1
             else:
                right = mid - 1
+     **注意<=**
   
 > 参考链接
 二分查找代码模板
@@ -132,6 +133,20 @@ x 的平方根（字节跳动、微软、亚马逊在半年内面试中考过）
                         return True
                   else:
                         return False
+
+ * 45. 跳跃游戏 II 给定一个非负整数数组，你最初位于数组的第一个位置。数组中的每个元素代表你在该位置可以跳跃的最大长度。你的目标是使用最少的跳跃次数到达数组的最后一个位置。
+
+            class Solution:
+               def jump(self, nums: List[int]) -> int:
+                  maxPos, step, end = 0, 0, 0
+                  for i in range(len(nums)-1): # 注意:len(nums)-1
+                        if maxPos >= i:
+                           maxPos = max(nums[i]+i, maxPos)
+                           if i == end:
+                              step += 1
+                              end = maxPos
+                  return step
+   **注意:len(nums)-1**
  * 127. 单词接龙给定两个单词（beginWord 和 endWord）和一个字典，找到从 beginWord 到 endWord 的最短转换序列的长度。转换需遵循如下规则：每次转换只能改变一个字母。转换过程中的中间单词必须是字典中的单词。
 
             # BFS:
@@ -165,7 +180,102 @@ x 的平方根（字节跳动、微软、亚马逊在半年内面试中考过）
                            all_combo_dict[intermediate_word] = []
 
                   return 0
+
+ * 126. 单词接龙 II https://leetcode-cn.com/problems/word-ladder-ii/ ;给定两个单词（beginWord 和 endWord）和一个字典 wordList，找出所有从 beginWord 到 endWord 的最短转换序列。转换需遵循如下规则：每次转换只能改变一个字母.转换后得到的单词必须是字典中的单词。说明:如果不存在这样的转换序列，返回一个空列表。所有单词具有相同的长度。所有单词只由小写字母组成。字典中不存在重复的单词。你可以假设 beginWord 和 endWord 是非空的，且二者不相同。
+
+            class Solution:
+               def findLadders(self, beginWord: str, endWord: str, wordList: List[str]) -> List[List[str]]:
+                  
+                  if endWord not in  wordList or not beginWord or not wordList:
+                        return []
+                  
+                  wordList = set(wordList)
+                  res = []
+                  layer = {}
+                  layer[beginWord] = [[beginWord]]
+                  
+                  while layer:
+                        newlayer = collections.defaultdict(list)
+                        for w in layer:
+                           if w == endWord:
+                              res.extend(k for k in layer[w])
+                           else:
+                              for i in range(len(w)):
+                                    for c in 'abcdefghijklmnopqrstuvwxyz':
+                                       neww = w[:i] + c + w[i+1:]
+                                       if neww in wordList:
+                                          newlayer[neww] += [j + [neww] for j in layer[w]]
+                        wordList -= set(newlayer.keys())
+                        layer = newlayer
+                        
+                  return res
+
+ * 529. 扫雷游戏 https://leetcode-cn.com/problems/minesweeper/ 让我们一起来玩扫雷游戏！
+
+            # 529. 扫雷游戏
+            # https://leetcode-cn.com/problems/minesweeper/
+            # 让我们一起来玩扫雷游戏！
+
+            # 给定一个代表游戏板的二维字符矩阵。 'M' 代表一个未挖出的地雷，'E' 代表一个未挖出的空方块，'B' 代表没有相邻（上，下，左，右，和所有4个对角线）地雷的已挖出的空白方块，数字（'1' 到 '8'）表示有多少地雷与这块已挖出的方块相邻，'X' 则表示一个已挖出的地雷。
+
+            # 现在给出在所有未挖出的方块中（'M'或者'E'）的下一个点击位置（行和列索引），根据以下规则，返回相应位置被点击后对应的面板：
+
+            # 如果一个地雷（'M'）被挖出，游戏就结束了- 把它改为 'X'。
+            # 如果一个没有相邻地雷的空方块（'E'）被挖出，修改它为（'B'），并且所有和其相邻的未挖出方块都应该被递归地揭露。
+            # 如果一个至少与一个地雷相邻的空方块（'E'）被挖出，修改它为数字（'1'到'8'），表示相邻地雷的数量。
+            # 如果在此次点击中，若无更多方块可被揭露，则返回面板。
+
+            class Solution:
+               def updateBoard(self, board: List[List[str]], click: List[int]) -> List[List[str]]:
+                  if not board:
+                        return []
+                  
+                  i, j = click[0], click[1]
+                  
+                  if board[i][j] == 'M':
+                        board[i][j] = 'X'
+                        return board
+                  
+                  self.dfs(board, i, j)
+                  
+                  return board
+               
+               def dfs(self, board, i, j):
+                  if board[i][j] != 'E':
+                        return None
+                  
+                  rows, cols = len(board), len(board[0])
+                  directions = [(0,-1), (-1,-1), (-1,0), (-1,1), (0,1), (1,1), (1,0), (1,-1)]
+                  mine_count = 0
+                  
+                  for d in directions:
+                        ni, nj = i + d[0], j + d[1]
+                        if 0 <= ni < rows and 0 <= nj < cols and board[ni][nj] == 'M':
+                           mine_count += 1
+                           
+                  if mine_count == 0:
+                        board[i][j] = 'B'
+                        
+                  else:
+                        board[i][j] = str(mine_count)
+                        return None
+                  
+                  for d in directions:
+                        ni, nj = i + d[0], j + d[1]
+                        if 0 <= ni < rows and 0 <= nj < cols:
+                           self.dfs(board, ni, nj)
 #### **Python语法注意：**
-
+* for _ in range(len(queue)) 与 for _ in queue 的区别：
+  （1）len(queue)是定值， for的循环次数固定； 
+  （2）for _ in queue：循环次数随着queue的变化而变化。
 #### **对代码对一些理解：**
+* 牛顿法求C的算术平方根：
+  $$x_{i+1}=\frac12(x_i+\frac{C}{x_i})$$
+  x的初始值：一般取C
 
+#### **需要理解的地方：**
+* 二分查找中的left < right ，何时有=，何时没有=。
+* 127、126单词接龙需要进一步理解:
+   注意：1.return level是否加1；
+      2.去掉visited；
+      3.用queue与dict的区别。

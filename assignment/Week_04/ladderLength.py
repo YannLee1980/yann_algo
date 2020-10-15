@@ -13,3 +13,33 @@
 # 字典中不存在重复的单词。
 # 你可以假设 beginWord 和 endWord 是非空的，且二者不相同。
 
+import collections
+class Solution:
+    def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
+        if endWord not in wordList or not beginWord or not wordList:
+            return 0
+        
+        L = len(beginWord)
+        all_combo_dict = collections.defaultdict(list)
+        queue = [(beginWord, 1)]
+        visited = set()
+        
+        for word in wordList:
+            for i in range(L):
+                all_combo_dict[word[:i]+'*'+word[i+1:]].append(word)
+        
+        visited.add(beginWord)
+        
+        while queue:
+            current_word, level = queue.pop(0)
+            for i in range(L):
+                intermediate_word = current_word[:i] + '*' + current_word[i+1:]
+                for word in all_combo_dict[intermediate_word]:
+                    if word == endWord:
+                        return level + 1
+                    if word not in visited:
+                        visited.add(word)
+                        queue.append([word, level+1])
+                all_combo_dict[intermediate_word] = []
+                
+        return 0

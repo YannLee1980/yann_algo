@@ -2,7 +2,7 @@ class Solution:
     def jump(self, nums: list) -> int:
         n = len(nums)
         maxPos, end, step = 0, 0, 0
-        for i in range(n - 1):
+        for i in range(n):
             if maxPos >= i:
                 maxPos = max(maxPos, i + nums[i])
                 if i == end:
