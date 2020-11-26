@@ -1,5 +1,5 @@
 class Solution:
-    def threeSum(self, nums: list) -> list:
+    def (self, nums: list) -> list:
         result = []
         for i in range(0, len(nums)-2):
             for j in range(i+1, len(nums)-1):
@@ -16,4 +16,4 @@ class Solution:
         return result
 
 s = Solution()
-print(s.threeSum([-1, 0, 1, 2, -1, -4]))
+print(s.([-1, 0, 1, 2, -1, -4]))

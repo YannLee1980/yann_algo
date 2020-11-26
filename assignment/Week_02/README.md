@@ -127,18 +127,18 @@
    * 深度优先：
 
           # 代码模版：（用栈）
-          def bfs(grid, start):
+          def dfs(grid, start):
             stack = []
             visited = set()  ## 注意：要用集合，用了列表会重复遍历
-            queue.append(start)
+            stack.append(start)
             visited.add(start)
-            while queue:
-              node = queue.pop()
+            while stack:
+              node = stack.pop()
               process(node)
               nodes = generate_related_nodes(node)
               for node in nodes:
                 if node not in visited:
-                  queue.append(node)
+                  stack.append(node)
                   visited.add(node)
                 
             # 代码模版：（递归）

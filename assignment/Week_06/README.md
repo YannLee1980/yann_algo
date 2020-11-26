@@ -1,6 +1,7 @@
 # 算法训练营
 ---
 ## 第6周：
+---
 ### **本周内容一览：**
 ### 第12课 动态规划：
 1. 动态规划的实现及关键点：
@@ -98,6 +99,7 @@
             a[i][1] = a[i-1][0] + nums[i]
 
             # DP + 1维数组：
+            # a[i] 存储到第i个房子第最大偷取金钱，并不管它有没有被偷。
             a[i] = max(a[i-1], a[i-2]+nums[i])
             # 初始值：
             a[0] = 0
@@ -107,7 +109,8 @@
             pre = 0
             now = 0
             now, pre = max(now, pre+nums[i]), now
-
+* 213. 打家劫舍 II----你是一个专业的小偷，计划偷窃沿街的房屋，每间房内都藏有一定的现金。这个地方所有的房屋都围成一圈，这意味着第一个房屋和最后一个房屋是紧挨着的。同时，相邻的房屋装有相互连通的防盗系统，如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。给定一个代表每个房屋存放金额的非负整数数组，计算你在不触动警报装置的情况下，能够偷窃到的最高金额。
+  **转化成上一问题：把nums分成nums[1:]和nums[:-1]并分别用上面第方法解决，然后取两个结果的最大值。**
 #### **漂亮代码收集：**
 
 #### **Python语法注意：**
@@ -133,7 +136,7 @@
       from functools import lru_cache
       class Solution:
          def minimumTotal(self, triangle: List[List[int]]) -> int:
-            @lru_cache
+            @lru_cache(maxsize=None)
             def dfs(i, j):
                   if i == len(triangle) - 1:
                      return triangle[i][j]
@@ -143,7 +146,52 @@
             
             return dfs(0, 0)
 #### **对代码对一些理解：**
+* 123. 买卖股票的最佳时机 III----给定一个数组，它的第 i 个元素是一支给定的股票在第 i 天的价格。设计一个算法来计算你所能获取的最大利润。你最多可以完成 两笔 交易。注意: 你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
 
+            # DP + 二维数组存储状态
+            class Solution:
+               def maxProfit(self, prices: List[int]) -> int:
+                  n = len(prices)
+                  if n < 2: return 0
+                  dp = [[0] * 5 for _ in range(n)] # 记录每天五种状态下的最大获利
+                  dp[0][0] = 0 # 不操作
+                  dp[0][1] = -prices[0] # 第一次买入
+                  dp[0][2] = 0 # 第一次卖出
+                  dp[0][3] = -prices[0] # 第二次买入
+                  dp[0][4] = 0 # 第二次卖出
+                  for i in range(1, n):
+                        dp[i][0] = dp[i-1][0] # 不操作
+                        dp[i][1] = max(dp[i-1][1], dp[i-1][0] - prices[i]) 
+                        dp[i][2] = max(dp[i-1][2], dp[i-1][1] + prices[i])
+                        dp[i][3] = max(dp[i-1][3], dp[i-1][2] - prices[i])
+                        dp[i][4] = max(dp[i-1][4], dp[i-1][3] + prices[i])
+                        
+                  # 最大值只发生在不持股的时候，因此来源有 3 个：j = 0 ,j = 2, j = 4
+                  return max(dp[-1][0], dp[-1][2], dp[-1][4])
+   **注意：各状态的存储**
+
+            # DP + 一维数组存储状态
+            class Solution:
+               def maxProfit(self, prices: List[int]) -> int:
+                  n = len(prices)
+                  if n < 2: return 0
+                  dp = [0] * 5 # 记录当天五种状态下的最大获利
+                  # 初始化：
+                  dp[0] = 0 # 不操作
+                  dp[1] = -prices[0] # 第一次买入
+                  dp[2] = 0 # 第一次卖出
+                  dp[3] = -prices[0] # 第二次买入
+                  dp[4] = 0 # 第二次卖出
+                  
+                  for i in range(1, n):
+                        dp[0] = 0 # 不操作
+                        dp[1] = max(dp[1], dp[0] - prices[i]) 
+                        dp[2] = max(dp[2], dp[1] + prices[i])
+                        dp[3] = max(dp[3], dp[2] - prices[i])
+                        dp[4] = max(dp[4], dp[3] + prices[i])
+                        
+                  # 最大值只发生在不持股的时候，因此来源有 3 个：j = 0 ,j = 2, j = 4
+                  return max(dp)
 
 #### **需要理解的地方：**
 
